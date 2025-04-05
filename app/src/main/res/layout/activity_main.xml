@@ -7,6 +7,22 @@
     android:padding="24dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/etPreferenceText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter text"
+        android:inputType="text"/>
+
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update"/>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="16dp" />
 
     <Button
         android:id="@+id/btnStart"

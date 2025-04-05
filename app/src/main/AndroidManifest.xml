@@ -24,6 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TransientActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.ionic.overlay"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
         <service
             android:name=".VoiceService"
             android:exported="false"

@@ -1,12 +1,15 @@
 package com.xforia.voicecontrol
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +22,9 @@ class MainActivity : AppCompatActivity() {
     private val REQUEST_CODE = 1001
     private lateinit var startBtn: Button
     private lateinit var stopBtn: Button
+    private lateinit var btnUpdate: Button
+    private lateinit var etPreferenceText: EditText
+    private lateinit var sharedPrefs: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -31,10 +37,19 @@ class MainActivity : AppCompatActivity() {
 
         startBtn = findViewById(R.id.btnStart)
         stopBtn = findViewById(R.id.btnStop)
-
+        etPreferenceText = findViewById(R.id.etPreferenceText)
+        btnUpdate = findViewById(R.id.btnUpdate)
+        sharedPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        etPreferenceText.setText(getStoredPreference())
         startBtn.setOnClickListener {
             Log.e("VoiceService", "Starting Service")
             ContextCompat.startForegroundService(this, Intent(this, VoiceService::class.java))
+        }
+        btnUpdate.setOnClickListener {
+            val inputText = etPreferenceText.text.toString().trim()
+            if (inputText.isNotEmpty()) {
+                storePreference(inputText)
+            }
         }
 
         stopBtn.setOnClickListener {
@@ -43,6 +58,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         checkPermissions()
+    }
+    private fun storePreference(value: String) {
+        sharedPrefs.edit().putString("preference_key", value).apply()
+    }
+
+    private fun getStoredPreference(): String {
+        var nameS = sharedPrefs.getString("preference_key", "") ?: ""
+        if(nameS.isEmpty()){
+            nameS = "Rahul"
+            storePreference(nameS)
+        }
+        return nameS
     }
     private fun checkPermissions() {
         val permissions = arrayOf(
